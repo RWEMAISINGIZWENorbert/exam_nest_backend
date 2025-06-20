@@ -1,8 +1,7 @@
-const express = require('express');
-const router = express.Router();
-const aiController = require('../controllers/aiController');
-
+import express from 'express';
+const aiRouter = express.Router();
+import {processFileAndGenerateAnswers} from "../controllers/aiController.js";
 // Route to process file and generate answers
-router.post('/process/:fileId', aiController.processFileAndGenerateAnswers);
+aiRouter.post('/process/:fileId', processFileAndGenerateAnswers);
 
-module.exports = router; 
+export default aiRouter;

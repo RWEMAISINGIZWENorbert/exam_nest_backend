@@ -1,8 +1,9 @@
-require('dotenv').config();
-const express = require('express');
-const { default: dbConnect } = require('./config/db_connect');
-const fileRoutes = require('./routes/fileRoutes');
-const aiRoutes = require('./routes/aiRoutes');
+import dotenv  from 'dotenv';
+dotenv.config();
+import express  from'express';
+import dbConnect from './config/db_connect.js';
+import fileRoutes from './routes/fileRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 4000;

@@ -1,14 +1,14 @@
-const express = require('express');
-const fileController = require('../controllers/fileController');
-const router = express.Router();
+import express from 'express';
+import { getAllFiles, getFileById, uploadFile } from '../controllers/fileController.js';
+const fileRouter = express.Router();
 
 // Upload file route
-router.post('/upload', fileController.uploadFile);
+fileRouter.post('/upload', uploadFile);
 
 // Get all files route
-router.get('/', fileController.getAllFiles);
+fileRouter.get('/', getAllFiles);
 
 // Get file by ID route
-router.get('/:id', fileController.getFileById);
+fileRouter.get('/:id', getFileById);
 
-module.exports = router; 
+export default fileRouter;

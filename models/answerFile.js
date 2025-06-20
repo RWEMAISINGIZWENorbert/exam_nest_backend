@@ -1,10 +1,14 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const fileSchema = new mongoose.Schema({
+const answerFileSchema = new mongoose.Schema({
     filename: {
         type: String,
         required: true
     },
+    fileQuestionId: {
+       type: mongoose.Types.ObjectId,
+       required: true 
+    }, 
     originalName: {
         type: String,
         required: true
@@ -29,5 +33,5 @@ const fileSchema = new mongoose.Schema({
      timestamps: true
 });
 
-const File = mongoose.model('File', fileSchema); 
-export default File;
+const answerFileModel =  mongoose.model('answerFile', answerFileSchema);
+export default answerFileModel;

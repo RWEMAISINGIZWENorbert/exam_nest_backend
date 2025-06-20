@@ -1,8 +1,9 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
-const File = require('../models/File');
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
-const https = require('https');
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import File from '../models/File.js';
+import answerFileModel from '../models/answerFile.js';
+import fs from 'fs';
+import PDFDocument from 'pdfkit';
+import https from 'https';
 
 // Initialize Google AI with explicit configuration
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY, {
@@ -132,7 +133,7 @@ function createAnswerPDF(questionsAndAnswers, outputPath) {
 }
 
 // Controller function to process file and generate answers
-exports.processFileAndGenerateAnswers = async (req, res) => {
+export const processFileAndGenerateAnswers = async (req, res) => {
     try {
         const fileId = req.params.fileId;
         const file = await File.findById(fileId);
@@ -156,14 +157,15 @@ exports.processFileAndGenerateAnswers = async (req, res) => {
         await createAnswerPDF(questionsAndAnswers, outputPath);
         
         // Create new file document for answers
-        const answerFile = new File({
+        const answerFile = new answerFileModel({
             filename: `answers_${fileId}.pdf`,
             originalName: `answers_${file.originalName}`,
             mimeType: 'application/pdf',
             size: fs.statSync(outputPath).size,
             content: questionsAndAnswers.map(qa => 
                 `Q: ${qa.question}\nA: ${qa.answer}`
-            ).join('\n\n')
+            ).join('\n\n'),
+            fileQuestionId: fileId // <-- Reference to the question file
         });
         
         await answerFile.save();

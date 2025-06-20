@@ -1,9 +1,9 @@
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
-const pdfParse = require('pdf-parse');
-const mammoth = require('mammoth');
-const File = require('../models/File');
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
+import pdfParse from 'pdf-parse';
+import mammoth from 'mammoth';
+import File from '../models/File.js';
 
 // Configure multer for file upload
 const storage = multer.diskStorage({
@@ -35,7 +35,7 @@ const upload = multer({
 }).single('file');
 
 // Upload and process file
-exports.uploadFile = async (req, res) => {
+export  const uploadFile = async (req, res) => {
     try {
         upload(req, res, async function (err) {
             if (err) {
@@ -84,7 +84,7 @@ exports.uploadFile = async (req, res) => {
 };
 
 // Get all files
-exports.getAllFiles = async (req, res) => {
+export const getAllFiles = async (req, res) => {
     try {
         const files = await File.find();
         res.status(200).json(files);
@@ -94,7 +94,7 @@ exports.getAllFiles = async (req, res) => {
 };
 
 // Get file by ID
-exports.getFileById = async (req, res) => {
+export const getFileById = async (req, res) => {
     try {
         const file = await File.findById(req.params.id);
         if (!file) {
