@@ -4,6 +4,7 @@ import express  from'express';
 import dbConnect from './config/db_connect.js';
 import fileRoutes from './routes/fileRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
+import summaryRoutes from './routes/summaryRoutes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/files', fileRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/summary', summaryRoutes);
 
 dbConnect().then(() => 
    app.listen(PORT, () => console.log(`server is running on http://localhost:${PORT}`))
