@@ -196,8 +196,9 @@ export const login = async (req, res) => {
         const studentUserFound = await studentModel.findOne({email});
 
         if(staffuserFound){
-             const accessToken = generateAccessToken;
-             const refreshToken = generateRefreshToken;
+             const userId = staffuserFound._id;
+             const accessToken = generateAccessToken(userId);
+             const refreshToken = generateRefreshToken(userId);
              const options = { 
                 httpOnly: true,
                 secuere: true,
@@ -212,8 +213,9 @@ export const login = async (req, res) => {
              });
 
         }else if(studentUserFound){
-             const accessToken = generateAccessToken;
-             const refreshToken = generateRefreshToken;
+             const userId = studentUserFound._id
+             const accessToken = generateAccessToken(userId);
+             const refreshToken = generateRefreshToken(userId);
              const options = { 
                 httpOnly: true,
                 secuere: true,
