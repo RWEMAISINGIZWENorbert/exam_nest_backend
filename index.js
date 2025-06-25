@@ -6,6 +6,7 @@ import fileRoutes from './routes/fileRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import summaryRoutes from './routes/summaryRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import subjectRoutes from './routes/subjectRoutes.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/files', fileRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/summary', summaryRoutes);
+app.use('/api/subjects', subjectRoutes);
 
 dbConnect().then(() => 
    app.listen(PORT, () => console.log(`server is running on http://localhost:${PORT}`))
