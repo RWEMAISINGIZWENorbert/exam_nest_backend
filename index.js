@@ -5,6 +5,7 @@ import dbConnect from './config/db_connect.js';
 import fileRoutes from './routes/fileRoutes.js';
 import aiRoutes from './routes/aiRoutes.js';
 import summaryRoutes from './routes/summaryRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/files', fileRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/summary', summaryRoutes);
