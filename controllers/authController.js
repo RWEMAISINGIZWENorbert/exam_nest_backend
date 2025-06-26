@@ -4,6 +4,8 @@ import bcrypt from "bcryptjs";
 import schoolAdminModel from "../models/schoolAdmin.js";
 import staffModel from "../models/staff.js";
 import studentModel from "../models/student.js";
+import { generateAccessToken } from "../utils/generateAccessToken.js";
+// import { generateRefreshToken } from "../utils/generateRefreshToken.js";
 
 export const schoolRegister =  async (req,res) => {
      try {
@@ -15,9 +17,23 @@ export const schoolRegister =  async (req,res) => {
              });
          }
 
-         const staffCode = generateStaffCode;
-         const studentCode = generateStudentCode;
-         
+         let staffCode =  generateStaffCode();
+         let studentCode =  generateStudentCode();
+            
+        while (studentCode === staffCode) {
+           studentCode = generateStudentCode();
+         }
+        
+          const isStaffCodeExist = await schoolModel.findOne({ staffCode });
+          const isStudentCodeExist = await schoolModel.findOne({ studentCode });
+          while(isStaffCodeExist){
+             staffCode = generateStaffCode();
+          }
+
+          while (isStudentCodeExist) {
+            studentCode = generateStudentCode();
+          }
+    
          const payload = {
              name,
              province,
@@ -31,7 +47,8 @@ export const schoolRegister =  async (req,res) => {
          await newSchool.save();
          
          return res.status(201).json({
-            msg: "New School registered succesfully"
+            msg: "New School registered succesfully",
+            data: newSchool
          });
 
      } catch (error) {
@@ -143,7 +160,8 @@ export const userRegister = async (req,res) => {
          
          const hashedPassword = await bcrypt.hash(password, 10);
          const isStaff =  await schoolModel.findOne({staffCode: code});
-         const schoolId = isStaff._id;
+         const isStudent =  await schoolModel.findOne({studentCode: code});
+         const schoolId = isStaff ? isStaff._id : isStudent ? isStudent._id :  null;
          if(isStaff){
              const isAdmin = await schoolAdminModel.findOne({email});
               let role;
@@ -159,9 +177,13 @@ export const userRegister = async (req,res) => {
              const newStaffMember = new staffModel(payload);
              await newStaffMember.save();
 
-         }else{
-            const isStudent =  await schoolModel.findOne({staffCode: code});
-            const schoolId  = isStudent._id;
+             return res.status(200).json({
+                msg: `New ${role} registered succefully`,
+                dat: newStaffMember
+             })
+
+         }else if(isStudent){   
+            // const schoolId  = isStudent._id;
             const payload = {
                  schoolId,
                  name,
@@ -171,11 +193,16 @@ export const userRegister = async (req,res) => {
 
             const newStudent = new studentModel(payload);
             await newStudent.save();
-         }
-        
-         return res.status(201).json({
-          msg: 'Account created succesfully'
-         });          
+                    
+           return res.status(201).json({
+          msg: 'Account created succesfully',
+          data: newStudent
+         });     
+         }else {
+             return res.status(400).json({
+                msg: "please provide the valid code"
+             });
+         }     
      } catch (error) {
         return res.status(500).json({
             msg: `Unknow Error Occured ${error}`
@@ -196,9 +223,18 @@ export const login = async (req, res) => {
         const studentUserFound = await studentModel.findOne({email});
 
         if(staffuserFound){
+              
+            const matchPassword = await bcrypt.compare(password, staffuserFound.password);
+
+            if(!matchPassword){
+                 return res.status(400).json({
+                    msg: "The password provided those not match"
+                 })
+            }
+
              const userId = staffuserFound._id;
-             const accessToken = generateAccessToken(userId);
-             const refreshToken = generateRefreshToken(userId);
+             const accessToken = await generateAccessToken(userId, staffuserFound.schoolId);
+            //  const refreshToken = generateRefreshToken(userId, staffuserFound.schoolId);
              const options = { 
                 httpOnly: true,
                 secuere: true,
@@ -206,16 +242,24 @@ export const login = async (req, res) => {
              } 
 
              res.cookie('accessToken', accessToken, options);
-             res.cookie('refreshToken', refreshToken, options);
+            //  res.cookie('refreshToken', refreshToken, options);
              
              return res.status(201).json({
                 msg: "User Logged In succesfully"
              });
 
         }else if(studentUserFound){
+
+            const matchPassword = await bcrypt.compare(password, studentUserFound.password);
+
+            if(!matchPassword){
+                 return res.status(400).json({
+                    msg: "The password provided those not match"
+                 })
+            }            
              const userId = studentUserFound._id
-             const accessToken = generateAccessToken(userId);
-             const refreshToken = generateRefreshToken(userId);
+             const accessToken = generateAccessToken(userId, studentUserFound.schoolId);
+            //  const refreshToken = generateRefreshToken(userId, studentUserFound.schoolId);
              const options = { 
                 httpOnly: true,
                 secuere: true,
@@ -223,7 +267,7 @@ export const login = async (req, res) => {
              } 
 
              res.cookie('accessToken', accessToken, options);
-             res.cookie('refreshToken', refreshToken, options);
+            //  res.cookie('refreshToken', refreshToken, options);
              
              return res.status(201).json({
                 msg: "User Logged In succesfully"

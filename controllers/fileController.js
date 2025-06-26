@@ -69,13 +69,13 @@ export  const uploadFile = async (req, res) => {
 // Get all files
 export const getAllFiles = async (req, res) => {
     try {
-        const files = await File.find();
+         const schoolId = req.schoolId;
+        const files = await File.find({ schoolId });
         res.status(200).json(files);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
-
 // Get file by ID
 export const getFileById = async (req, res) => {
     try {
