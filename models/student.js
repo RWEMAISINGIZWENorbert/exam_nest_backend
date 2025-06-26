@@ -24,6 +24,11 @@ const studentSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  schoolId: {
+     type: mongoose.Schema.Types.ObjectId,
+     required: true,
+     ref: 'school'
+  }
 },{
     timestamps: true 
 });

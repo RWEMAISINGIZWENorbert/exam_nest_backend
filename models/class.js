@@ -7,7 +7,8 @@ const classSchema = new mongoose.model({
      },
      schoolId:{ 
       type: mongoose.Schema.ObjectId,
-      required: [true, 'please specify the id of the school']
+      required: [true, 'please specify the id of the school'],
+      ref: 'school'
      }
 }, {
     timeStamps: true

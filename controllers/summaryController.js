@@ -1,13 +1,18 @@
 import answerFileModel from "../models/answerFile.js";
+import questionsPaperFileModel from "../models/File.js";
+import studentModel from "../models/student.js";
 
 export const summaryDashboard = async (req,res) => {
      try {
-        const totalQuestionPapers = File.length;
-        const totalAnswerPapers = answerFileModel.length;
+         const schoolId = req.schoolId
+        const totalQuestionPapers = (await questionsPaperFileModel.find({schoolId})).length;
+        const totalAnswerPapers = (await answerFileModel.find({schoolId})).length;
+        const totalStudents = (await studentModel.find({schoolId})).length
         
         return res.status(200).json({
             'totalQuestionPapers': totalQuestionPapers,
-            'totalAnswerPapers': totalAnswerPapers
+            'totalAnswerPapers': totalAnswerPapers,
+            'totalStudents': totalStudents
         })
 
      } catch (error) {
@@ -25,7 +30,7 @@ export const totalPapers = async (req,res) => {
 
         return res.status(200).json({
             msg: "Summary Retrived sccesfully",
-            totalPapers: totalPapers
+            totalPapers: totalPapers,
         })
          
      } catch (error) {

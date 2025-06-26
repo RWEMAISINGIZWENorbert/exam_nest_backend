@@ -28,7 +28,12 @@ const answerFileSchema = new mongoose.Schema({
     uploadDate: {
         type: Date,
         default: Date.now
-    }
+    },
+    schoolId: {
+     type: mongoose.Schema.Types.ObjectId,
+     required: true,
+     ref: 'school'
+  }  
 }, {
      timestamps: true
 });

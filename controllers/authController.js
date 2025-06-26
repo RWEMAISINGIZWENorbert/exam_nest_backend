@@ -153,7 +153,7 @@ export const userRegister = async (req,res) => {
                  name,
                  email,
                  password: hashedPassword,
-                 role
+                 role,
              }
               
              const newStaffMember = new staffModel(payload);

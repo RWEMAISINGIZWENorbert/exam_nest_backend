@@ -19,15 +19,22 @@ const schoolSChema = new mongoose.Schema({
      },
      staffCode: {
         type: String,
+        required: true
      },
      studentCode: {
-        type: String
+        type: String,
+        required: true
      },
      allowed: {
         type: Boolean,
         enum: [true, false],
         default: true  
-     }
+     },
+  schoolId: {
+     type: mongoose.Schema.Types.ObjectId,
+     required: true,
+     ref: 'school'
+  }
 }, {
     timestamps: true
 });

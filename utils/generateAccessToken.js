@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 
-export const generateAccessToken = async (userId) => {
+export const generateAccessToken = async (userId, schoolId) => {
     if(!process.env.ACCESS_TOKEN_SECRET_KEY){
         throw new Error("Acess Token secret key is not found");
       }
@@ -11,8 +11,8 @@ export const generateAccessToken = async (userId) => {
      throw new Error("User not found");    
    }
 
-   const token = await jwt.sign(
-    {id: userId},
+   const token = jwt.sign(
+    {id: userId, schoolId: schoolId},
     process.env.ACCESS_TOKEN_SECRET_KEY,
     {expiresIn: '24h'}
    );

@@ -29,6 +29,11 @@ const staffSChema = new mongoose.Schema({
      type: String,
      default: 'teacher',
      enum: ['admin', 'teacher']
+  },
+  schoolId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'school'
   }
 }, {
      timestamps: true

@@ -29,6 +29,8 @@ export const authMiddleware = async (req,res) => {
               const staff = await staffModel.findById(decoded.id);
               const student = await studentModel.findById(decoded.id);
               req.id = staff ? staff._id :  student ? student._if: null;
+              const schoolId = decoded.schoolId
+              req.schoolId = schoolId;
               next();
             }
         );    

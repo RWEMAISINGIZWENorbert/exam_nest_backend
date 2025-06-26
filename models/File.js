@@ -24,10 +24,15 @@ const fileSchema = new mongoose.Schema({
     uploadDate: {
         type: Date,
         default: Date.now
-    }
+    },
+    schoolId: {
+       type: mongoose.Schema.Types.ObjectId,
+       required: true,
+       ref: 'school'
+    }  
 }, {
      timestamps: true
 });
 
-const File = mongoose.model('File', fileSchema); 
-export default File;
+const questionsPaperFileModel = mongoose.model('File', fileSchema); 
+export default questionsPaperFileModel;
