@@ -24,6 +24,7 @@ export const upload = multer({ storage: storage });
 
 // Upload and process file (single file upload)
 export  const uploadFile = async (req, res) => {
+      const schoolId = req.schoolId;
     try {
         // Multer middleware will be applied in the route, so req.file is available here
         if (!req.file) {
@@ -49,7 +50,8 @@ export  const uploadFile = async (req, res) => {
             originalName: req.file.originalname,
             mimeType: req.file.mimetype,
             size: req.file.size,
-            content: content
+            content: content,
+            schoolId: schoolId
         });
 
         await file.save();
