@@ -281,6 +281,14 @@ exam_nest_backend/
 - `ACCESS_TOKEN_SECRET_KEY`: JWT secret
 - `GOOGLE_API_KEY`: Google Generative AI API key
 
+## 🌐 Hosted API
+
+The backend service is also hosted and available at:
+
+**https://exam-nest-backend.onrender.com/**
+
+You can use this base URL for all API requests in production or testing environments.
+
 ## 👥 Author
 - **Rwema Isingizwe Norbert**
 - GitHub: (https://github.com/RWEMAISINGIZWENorbert)
